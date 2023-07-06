@@ -20,6 +20,9 @@ class Ouvreur extends Utilisateur
     #[ORM\JoinColumn(nullable: false)]
     private ?Theatre $theatre = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $telephone = null;
+
     public function getNom(): ?string
     {
         return $this->nom;
@@ -52,6 +55,18 @@ class Ouvreur extends Utilisateur
     public function setIdTheatre(?Theatre $theatre): static
     {
         $this->theatre = $theatre;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string $telephone): static
+    {
+        $this->telephone = $telephone;
 
         return $this;
     }

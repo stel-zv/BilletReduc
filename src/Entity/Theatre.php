@@ -24,6 +24,9 @@ class Theatre extends Utilisateur
     #[ORM\OneToMany(mappedBy: 'theatre', targetEntity: Pourboire::class)]
     private Collection $pourboire;
 
+    #[ORM\Column(length: 255)]
+    private ?string $adresse = null;
+
     public function __construct()
     {
         $this->ouvreur = new ArrayCollection();
@@ -110,6 +113,18 @@ class Theatre extends Utilisateur
                 $pourboire->setTheatre(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): static
+    {
+        $this->adresse = $adresse;
 
         return $this;
     }
