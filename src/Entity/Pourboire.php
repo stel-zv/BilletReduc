@@ -17,15 +17,15 @@ class Pourboire
     #[ORM\Column]
     private ?float $montant = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $moyenPaiement = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $moyen_paiement = null;
-
-    #[ORM\ManyToOne(inversedBy: 'pourboire')]
+    #[ORM\ManyToOne(inversedBy: 'pourboires')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Theatre $theatre = null;
+    private ?theatre $theatre = null;
 
     public function getId(): ?int
     {
@@ -44,6 +44,18 @@ class Pourboire
         return $this;
     }
 
+    public function getMoyenPaiement(): ?string
+    {
+        return $this->moyenPaiement;
+    }
+
+    public function setMoyenPaiement(string $moyenPaiement): static
+    {
+        $this->moyenPaiement = $moyenPaiement;
+
+        return $this;
+    }
+
     public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
@@ -56,29 +68,15 @@ class Pourboire
         return $this;
     }
 
-    public function getMoyenPaiement(): ?string
-    {
-        return $this->moyen_paiement;
-    }
-
-    public function setMoyenPaiement(string $moyen_paiement): static
-    {
-        $this->moyen_paiement = $moyen_paiement;
-
-        return $this;
-    }
-
-    public function getTheatre(): ?Theatre
+    public function getTheatre(): ?theatre
     {
         return $this->theatre;
     }
 
-    public function setTheatre(?Theatre $theatre): static
+    public function setTheatre(?theatre $theatre): static
     {
         $this->theatre = $theatre;
 
         return $this;
     }
 }
-
-?>

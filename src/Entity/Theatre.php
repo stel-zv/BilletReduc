@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TheatreRepository;
-use App\Entity\Utilisateur;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,36 +10,42 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TheatreRepository::class)]
 class Theatre extends Utilisateur
 {
- 
-   #[ORM\Column(length: 255)]
-    private ?string $nom_theatre = null;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
     private ?string $qrcode = null;
 
-    #[ORM\OneToMany(mappedBy: 'theatre', targetEntity: Ouvreur::class)]
-    private Collection $ouvreur;
+    #[ORM\OneToMany(mappedBy: 'theatre', targetEntity: Ouvreur::class, orphanRemoval: true)]
+    private Collection $ouvreurs;
 
-    #[ORM\OneToMany(mappedBy: 'theatre', targetEntity: Pourboire::class)]
-    private Collection $pourboire;
-
-    #[ORM\Column(length: 255)]
-    private ?string $adresse = null;
+    #[ORM\OneToMany(mappedBy: 'theatre', targetEntity: Pourboire::class, orphanRemoval: true)]
+    private Collection $pourboires;
 
     public function __construct()
     {
-        $this->ouvreur = new ArrayCollection();
-        $this->pourboire = new ArrayCollection();
+        $this->ouvreurs = new ArrayCollection();
+        $this->pourboires = new ArrayCollection();
     }
 
-    public function getNomTheatre(): ?string
+    public function getId(): ?int
     {
-        return $this->nom_theatre;
+        return $this->id;
     }
 
-    public function setNomTheatre(string $nom_theatre): static
+    public function getNom(): ?string
     {
-        $this->nom_theatre = $nom_theatre;
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
 
         return $this;
     }
@@ -60,16 +65,16 @@ class Theatre extends Utilisateur
     /**
      * @return Collection<int, Ouvreur>
      */
-    public function getOuvreur(): Collection
+    public function getOuvreurs(): Collection
     {
-        return $this->ouvreur;
+        return $this->ouvreurs;
     }
 
     public function addOuvreur(Ouvreur $ouvreur): static
     {
-        if (!$this->ouvreur->contains($ouvreur)) {
-            $this->ouvreur->add($ouvreur);
-            $ouvreur->setIdTheatre($this);
+        if (!$this->ouvreurs->contains($ouvreur)) {
+            $this->ouvreurs->add($ouvreur);
+            $ouvreur->setTheatre($this);
         }
 
         return $this;
@@ -77,10 +82,10 @@ class Theatre extends Utilisateur
 
     public function removeOuvreur(Ouvreur $ouvreur): static
     {
-        if ($this->ouvreur->removeElement($ouvreur)) {
+        if ($this->ouvreurs->removeElement($ouvreur)) {
             // set the owning side to null (unless already changed)
-            if ($ouvreur->getIdTheatre() === $this) {
-                $ouvreur->setIdTheatre(null);
+            if ($ouvreur->getTheatre() === $this) {
+                $ouvreur->setTheatre(null);
             }
         }
 
@@ -90,15 +95,15 @@ class Theatre extends Utilisateur
     /**
      * @return Collection<int, Pourboire>
      */
-    public function getPourboire(): Collection
+    public function getPourboires(): Collection
     {
-        return $this->pourboire;
+        return $this->pourboires;
     }
 
     public function addPourboire(Pourboire $pourboire): static
     {
-        if (!$this->pourboire->contains($pourboire)) {
-            $this->pourboire->add($pourboire);
+        if (!$this->pourboires->contains($pourboire)) {
+            $this->pourboires->add($pourboire);
             $pourboire->setTheatre($this);
         }
 
@@ -107,7 +112,7 @@ class Theatre extends Utilisateur
 
     public function removePourboire(Pourboire $pourboire): static
     {
-        if ($this->pourboire->removeElement($pourboire)) {
+        if ($this->pourboires->removeElement($pourboire)) {
             // set the owning side to null (unless already changed)
             if ($pourboire->getTheatre() === $this) {
                 $pourboire->setTheatre(null);
@@ -116,18 +121,4 @@ class Theatre extends Utilisateur
 
         return $this;
     }
-
-    public function getAdresse(): ?string
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(string $adresse): static
-    {
-        $this->adresse = $adresse;
-
-        return $this;
-    }
 }
-
-?>

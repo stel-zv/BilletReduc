@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\OuvreurRepository;
-use App\Entity\Utilisateur;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OuvreurRepository::class)]
 class Ouvreur extends Utilisateur
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
@@ -16,12 +19,17 @@ class Ouvreur extends Utilisateur
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ouvreur')]
+    #[ORM\Column(length: 255)]
+    private ?string $telephone = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ouvreurs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Theatre $theatre = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $telephone = null;
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getNom(): ?string
     {
@@ -47,18 +55,6 @@ class Ouvreur extends Utilisateur
         return $this;
     }
 
-    public function getIdTheatre(): ?Theatre
-    {
-        return $this->theatre;
-    }
-
-    public function setIdTheatre(?Theatre $theatre): static
-    {
-        $this->theatre = $theatre;
-
-        return $this;
-    }
-
     public function getTelephone(): ?string
     {
         return $this->telephone;
@@ -70,6 +66,16 @@ class Ouvreur extends Utilisateur
 
         return $this;
     }
-}
 
-?>
+    public function getTheatre(): ?Theatre
+    {
+        return $this->theatre;
+    }
+
+    public function setTheatre(?Theatre $theatre): static
+    {
+        $this->theatre = $theatre;
+
+        return $this;
+    }
+}
