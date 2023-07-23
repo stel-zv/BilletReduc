@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
 #[ORM\InheritanceType('JOINED')]
-#[ORM\DiscriminatorColumn(name: 'role', type: 'string')]
+#[ORM\DiscriminatorColumn(name: 'roles', type: 'string')]
 #[ORM\DiscriminatorMap([
     'administrateur' => Administrateur::class,
     'theatre' => Theatre::class,
