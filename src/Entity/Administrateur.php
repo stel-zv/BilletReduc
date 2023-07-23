@@ -13,9 +13,9 @@ class Administrateur extends Utilisateur
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 250)]
     private ?string $prenom = null;
-
+    
     public function getNom(): ?string
     {
         return $this->nom;
